@@ -21,8 +21,6 @@ export class PuppeteerService {
     const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
 
-    await page.goto('https://developers.google.com/web/');
-
     // Googleページを開く
     await page.goto('https://www.google.com/');
     // 検索boxに`puppeteer`を入力
