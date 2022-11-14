@@ -11,13 +11,36 @@ export class PuppeteerService {
 
   async findAll() {
     const LAUNCH_OPTION = process.env.DYNO
-      ? { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] }
-      : { headless: false };
+      ? { args: ['--no-sandbox', '--disable-set/uid-sandbox', '--lang=ja'] }
+      : {
+          headless: false,
+          args: [
+            'LANG="fr"', // ゲストセッションで操作する。
+            // '--guest',
+            '--override-language-detection',
+          ],
+          env: { LANGUAGE: 'en' },
+          slowMo: 500,
+        };
     console.log(process.env.DYNO, 'process.env.DYNO');
     //ヘッドレスモードをオフにする(ブラウザが起動している様子が見えるようにする)
     const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
-
+    await page.setExtraHTTPHeaders({
+      'Accept-Language': 'ja',
+    });
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, 'language', {
+        get: function () {
+          return 'ja';
+        },
+      });
+      Object.defineProperty(navigator, 'languages', {
+        get: function () {
+          return ['ja'];
+        },
+      });
+    });
     // Googleページを開く
     await page.goto('https://www.google.com/');
     // 検索boxに`puppeteer`を入力
@@ -40,7 +63,7 @@ export class PuppeteerService {
     );
 
     console.log(searchResults);
-    await browser.close();
+    // await browser.close();
     return { searchResults };
   }
 
