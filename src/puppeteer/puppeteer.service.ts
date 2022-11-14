@@ -19,6 +19,7 @@ export class PuppeteerService {
     const LAUNCH_OPTION = process.env.DYNO
       ? { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] }
       : { headless: false };
+    console.log(process.env.DYNO, 'process.env.DYNO');
     //ヘッドレスモードをオフにする(ブラウザが起動している様子が見えるようにする)
     const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
