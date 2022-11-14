@@ -23,33 +23,29 @@ export class PuppeteerService {
 
     await page.goto('https://developers.google.com/web/');
 
-    // Type into search box.
-    await page.type('.devsite-search-field', 'Headless Chrome');
-
-    // Wait for suggest overlay to appear and click "show all results".
-    const allResultsSelector = '.devsite-suggest-all-results';
-    await page.waitForSelector(allResultsSelector);
-    await page.click(allResultsSelector);
-
-    // Wait for the results page to load and display the results.
-    const resultsSelector = '.gsc-results .gs-title';
-    await page.waitForSelector(resultsSelector);
-
-    // Extract the results from the page.
-    const links = await page.evaluate((resultsSelector) => {
-      return [...document.querySelectorAll(resultsSelector)].map(
-        (anchor: HTMLAnchorElement) => {
-          const title = anchor.textContent.split('|')[0].trim();
-          return `${title} - ${anchor.href}`;
+    // Googleページを開く
+    await page.goto('https://www.google.com/');
+    // 検索boxに`puppeteer`を入力
+    await page.type('input[name="q"]', 'puppeteer');
+    // 「Enter」ボタン押下
+    await page.keyboard.press('Enter');
+    // 検索結果要素の表示まで待機
+    await page.waitForSelector('.LC20lb', { visible: true });
+    // 検索結果のタイトル・リンク一覧取得
+    const searchResults = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLAnchorElement>('.LC20lb')].map(
+        (element) => {
+          const ppp = element.parentElement as HTMLAnchorElement;
+          return {
+            link: element.href || ppp.href || '何もなかった',
+            title: element.innerText,
+          };
         },
-      );
-    }, resultsSelector);
-
-    // Print all the files.
-    // console.log(links.join('\n'));
-
+      ),
+    );
+    console.log(searchResults);
     await browser.close();
-    return { links };
+    return { searchResults };
   }
 
   findOne(id: number) {
