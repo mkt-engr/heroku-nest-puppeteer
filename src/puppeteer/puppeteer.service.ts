@@ -13,7 +13,7 @@ export class PuppeteerService {
     console.log('環境変数', process.env.ENV);
     //Chronium起動オプション
     const LAUNCH_OPTION =
-      process.env.ENV === 'LOCAL'
+      process.env?.ENV === 'LOCAL'
         ? { headless: false }
         : { args: ['--no-sandbox', '--disable-setuid-sandbox'] };
 
