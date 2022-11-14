@@ -12,11 +12,13 @@ export class PuppeteerService {
   async findAll() {
     console.log('環境変数', process.env.ENV);
     //Chronium起動オプション
-    const LAUNCH_OPTION =
-      process.env?.ENV === 'LOCAL'
-        ? { headless: false }
-        : { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] };
-
+    // const LAUNCH_OPTION =
+    //   process.env.ENV === 'LOCAL'
+    //     ? { headless: false }
+    //     : { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] };
+    const LAUNCH_OPTION = process.env.DYNO
+      ? { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] }
+      : { headless: false };
     //ヘッドレスモードをオフにする(ブラウザが起動している様子が見えるようにする)
     const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
