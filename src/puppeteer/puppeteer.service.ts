@@ -10,12 +10,6 @@ export class PuppeteerService {
   }
 
   async findAll() {
-    console.log('環境変数', process.env.ENV);
-    //Chronium起動オプション
-    // const LAUNCH_OPTION =
-    //   process.env.ENV === 'LOCAL'
-    //     ? { headless: false }
-    //     : { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] };
     const LAUNCH_OPTION = process.env.DYNO
       ? { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] }
       : { headless: false };
@@ -44,6 +38,7 @@ export class PuppeteerService {
         },
       ),
     );
+
     console.log(searchResults);
     await browser.close();
     return { searchResults };
