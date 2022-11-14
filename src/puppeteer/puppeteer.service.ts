@@ -15,7 +15,7 @@ export class PuppeteerService {
     const LAUNCH_OPTION =
       process.env?.ENV === 'LOCAL'
         ? { headless: false }
-        : { args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+        : { args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=ja'] };
 
     //ヘッドレスモードをオフにする(ブラウザが起動している様子が見えるようにする)
     const browser = await puppeteer.launch(LAUNCH_OPTION);
