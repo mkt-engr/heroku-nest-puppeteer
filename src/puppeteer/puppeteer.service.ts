@@ -14,13 +14,9 @@ export class PuppeteerService {
       ? { args: ['--no-sandbox', '--disable-set/uid-sandbox', '--lang=ja'] }
       : {
           headless: false,
-          args: [
-            'LANG="fr"', // ゲストセッションで操作する。
-            // '--guest',
-            '--override-language-detection',
-          ],
+          args: ['LANG="ja"'],
           env: { LANGUAGE: 'en' },
-          slowMo: 500,
+          // slowMo: 500,
         };
     console.log(process.env.DYNO, 'process.env.DYNO');
     //ヘッドレスモードをオフにする(ブラウザが起動している様子が見えるようにする)
@@ -63,7 +59,7 @@ export class PuppeteerService {
     );
 
     console.log(searchResults);
-    // await browser.close();
+    await browser.close();
     return { searchResults };
   }
 
