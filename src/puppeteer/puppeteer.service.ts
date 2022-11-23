@@ -10,13 +10,11 @@ export class PuppeteerService {
   }
 
   async findAll() {
+    console.log(process.env.DYNO, 'dddd');
     const LAUNCH_OPTION = process.env.DYNO
-      ? { args: ['--no-sandbox', '--disable-set/uid-sandbox', '--lang=ja'] }
+      ? { args: ['--no-sandbox', '--disable-set/uid-sandbox'] }
       : {
           headless: false,
-          args: ['LANG="ja"'],
-          env: { LANGUAGE: 'en' },
-          // slowMo: 500,
         };
     console.log(process.env.DYNO, 'process.env.DYNO');
     //ヘッドレスモードをオフにする(ブラウザが起動している様子が見えるようにする)
